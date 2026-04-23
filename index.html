@@ -1,188 +1,979 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Abdullah Shahzad Portfolio</title>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Muhammad Abdullah Shahzad — Data Scientist</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@200;300;400;500&display=swap" rel="stylesheet" />
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #07070a;
+      --bg2:        #0c0c10;
+      --surface:    #111116;
+      --surface2:   #18181e;
+      --border:     rgba(255,255,255,0.06);
+      --border-hi:  rgba(255,255,255,0.12);
+      --text:       #ede8de;
+      --muted:      #6a6560;
+      --muted2:     #45433f;
+      --gold:       #c8a96e;
+      --gold2:      #9e7a42;
+      --gold-dim:   rgba(200,169,110,0.10);
+      --gold-glow:  rgba(200,169,110,0.05);
+      --r: 0px;
     }
+
+    html { scroll-behavior: smooth; }
 
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to right, #020617, #0f172a);
-      color: white;
-      scroll-behavior: smooth;
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      font-size: 15px;
+      overflow-x: hidden;
     }
 
+    /* ── CURSOR ── */
+    .cursor {
+      position: fixed; width: 6px; height: 6px;
+      background: var(--gold); border-radius: 50%;
+      pointer-events: none; z-index: 9999;
+      transform: translate(-50%,-50%);
+      transition: transform .08s, width .25s, height .25s, opacity .2s;
+    }
+    .cursor-ring {
+      position: fixed; width: 34px; height: 34px;
+      border: 1px solid rgba(200,169,110,0.4); border-radius: 50%;
+      pointer-events: none; z-index: 9998;
+      transform: translate(-50%,-50%);
+      transition: width .3s, height .3s, top .06s ease-out, left .06s ease-out, opacity .3s;
+    }
+    body.hovering .cursor { width: 10px; height: 10px; }
+    body.hovering .cursor-ring { width: 44px; height: 44px; border-color: rgba(200,169,110,0.7); }
+
+    /* ── NOISE ── */
+    body::after {
+      content: ''; position: fixed; inset: 0; z-index: 1000;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.022; pointer-events: none;
+    }
+
+    /* ── NAV ── */
     nav {
-      position: fixed;
-      width: 100%;
-      top: 0;
-      background: rgba(0,0,0,0.6);
-      backdrop-filter: blur(10px);
-      display: flex;
-      justify-content: center;
-      gap: 30px;
-      padding: 15px;
-      z-index: 1000;
+      position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 4rem; height: 66px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(7,7,10,0.90);
+      backdrop-filter: blur(24px) saturate(180%);
     }
-
-    nav a {
-      color: #38bdf8;
-      text-decoration: none;
-      font-weight: bold;
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem; font-weight: 300; letter-spacing: 0.22em;
+      color: var(--text); text-decoration: none; text-transform: uppercase;
     }
-
-    header {
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
+    .nav-logo em { font-style: normal; color: var(--gold); }
+    .nav-links { display: flex; gap: 2.8rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.68rem; font-weight: 400; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--muted);
+      text-decoration: none; transition: color .2s; position: relative;
     }
-
-    h1 {
-      font-size: 60px;
-      margin-bottom: 10px;
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px;
+      background: var(--gold); transition: width .3s;
     }
+    .nav-links a:hover, .nav-links a.active { color: var(--gold); }
+    .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+    .nav-resume {
+      font-size: 0.66rem; font-weight: 400; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--gold);
+      text-decoration: none; border: 1px solid rgba(200,169,110,0.35);
+      padding: 0.45rem 1.1rem; transition: all .25s;
+    }
+    .nav-resume:hover { background: var(--gold-dim); border-color: var(--gold); }
 
+    /* ── LAYOUT ── */
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 0 4rem; }
+    section { padding: 130px 0 80px; }
+
+    /* ── SECTION LABELS ── */
+    .sec-eyebrow {
+      display: flex; align-items: center; gap: 1rem;
+      font-size: 0.65rem; font-weight: 400; letter-spacing: 0.24em;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 1.4rem;
+    }
+    .sec-eyebrow::before { content:''; width: 28px; height: 1px; background: var(--gold); flex-shrink: 0; }
+    .sec-eyebrow::after  { content:''; flex: 1; height: 1px; background: var(--border); }
+    .sec-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      font-weight: 300; line-height: 1.08; margin-bottom: 0.7rem;
+    }
+    .sec-sub { font-size: 0.88rem; color: var(--muted); font-weight: 300; max-width: 500px; margin-bottom: 3.5rem; line-height: 1.75; }
+
+    /* ══════════ HERO ══════════ */
+    #hero {
+      min-height: 100vh; display: flex; align-items: center;
+      padding-top: 66px; position: relative; overflow: hidden;
+    }
+    .hero-grid-bg {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(200,169,110,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(200,169,110,0.035) 1px, transparent 1px);
+      background-size: 72px 72px;
+      -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black, transparent);
+      mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black, transparent);
+    }
+    .hero-orb {
+      position: absolute; pointer-events: none;
+      width: 700px; height: 500px; top: 10%; left: 50%;
+      transform: translateX(-40%);
+      background: radial-gradient(ellipse, rgba(200,169,110,0.055) 0%, transparent 65%);
+    }
+    .hero-content { position: relative; z-index: 2; width: 100%; }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 0.7rem;
+      font-size: 0.66rem; font-weight: 400; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--gold);
+      border: 1px solid rgba(200,169,110,0.25); padding: 0.4rem 1rem;
+      margin-bottom: 2.2rem;
+      opacity: 0; animation: riseUp .8s ease .1s forwards;
+    }
+    .hero-tag::before { content:'●'; font-size: 0.4rem; }
+    .hero-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.4rem, 7.5vw, 6.2rem);
+      font-weight: 300; line-height: 0.95;
+      letter-spacing: -0.02em; margin-bottom: 1.2rem;
+      opacity: 0; animation: riseUp .8s ease .25s forwards;
+    }
+    .hero-name em { font-style: italic; color: var(--gold); }
+    .hero-rule {
+      width: 1px; height: 48px; background: linear-gradient(var(--gold), transparent);
+      margin: 1.4rem 0;
+      opacity: 0; animation: riseUp .8s ease .38s forwards;
+    }
+    .hero-sub {
+      font-size: 0.82rem; font-weight: 300; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 1rem;
+      opacity: 0; animation: riseUp .8s ease .44s forwards;
+    }
+    .hero-desc {
+      font-size: 1rem; color: var(--muted); font-weight: 300;
+      max-width: 540px; line-height: 1.85; margin-bottom: 2.8rem;
+      opacity: 0; animation: riseUp .8s ease .52s forwards;
+    }
+    .hero-ctas {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      opacity: 0; animation: riseUp .8s ease .62s forwards;
+    }
     .btn {
-      padding: 10px 20px;
-      background: #38bdf8;
-      color: black;
-      border-radius: 8px;
-      text-decoration: none;
-      margin: 10px;
-      display: inline-block;
-      transition: 0.3s;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.8rem 1.8rem;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.68rem; font-weight: 400; letter-spacing: 0.16em;
+      text-transform: uppercase; text-decoration: none;
+      transition: all .3s; border: none; cursor: default;
     }
-
-    .btn:hover {
-      transform: scale(1.1);
+    .btn-gold {
+      background: linear-gradient(120deg, var(--gold) 0%, var(--gold2) 100%);
+      color: #07070a;
     }
-
-    section {
-      padding: 80px 20px;
-      max-width: 1000px;
-      margin: auto;
+    .btn-gold:hover { box-shadow: 0 0 32px rgba(200,169,110,0.3); transform: translateY(-2px); }
+    .btn-outline {
+      background: transparent; color: var(--text);
+      border: 1px solid var(--border-hi);
     }
-
-    h2 {
-      margin-bottom: 20px;
-      font-size: 30px;
-      color: #38bdf8;
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
+    .hero-links {
+      display: flex; gap: 2rem; margin-top: 3.5rem;
+      opacity: 0; animation: riseUp .8s ease .78s forwards;
     }
-
-    .card {
-      background: #1e293b;
-      padding: 20px;
-      margin: 15px 0;
-      border-radius: 12px;
-      transition: 0.3s;
+    .hero-link {
+      display: flex; align-items: center; gap: 0.45rem;
+      font-size: 0.68rem; font-weight: 400; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--muted2);
+      text-decoration: none; transition: color .2s;
     }
+    .hero-link:hover { color: var(--gold); }
+    .hero-link svg { width: 14px; height: 14px; }
 
-    .card:hover {
-      transform: translateY(-5px);
+    /* side stats */
+    .hero-aside {
+      position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+      display: flex; flex-direction: column; gap: 2.4rem; z-index: 2;
+      opacity: 0; animation: riseUp .8s ease 1s forwards;
     }
+    .h-stat { text-align: right; }
+    .h-stat-n {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.6rem; font-weight: 300; color: var(--gold); line-height: 1;
+    }
+    .h-stat-l { font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-top: 0.2rem; }
 
+    /* ══════════ ABOUT ══════════ */
+    .about-grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 5rem; align-items: start; }
+    .about-text p { font-size: 0.92rem; color: var(--muted); font-weight: 300; line-height: 1.9; margin-bottom: 1.1rem; }
+    .about-text strong { color: var(--text); font-weight: 400; }
+    .about-text em { font-family: 'Cormorant Garamond', serif; font-style: italic; color: var(--gold); font-size: 1.06em; }
+    .skill-group { margin-bottom: 2rem; }
+    .sg-label {
+      font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold);
+      margin-bottom: 0.7rem; display: flex; align-items: center; gap: 0.7rem;
+    }
+    .sg-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .tags { display: flex; flex-wrap: wrap; gap: 0.38rem; }
+    .tag {
+      font-size: 0.7rem; font-weight: 300; letter-spacing: 0.04em;
+      color: var(--muted); border: 1px solid var(--border);
+      padding: 0.22rem 0.65rem; transition: all .2s;
+    }
+    .tag:hover { border-color: rgba(200,169,110,0.4); color: var(--gold); background: var(--gold-glow); }
+
+    /* ══════════ PROJECTS ══════════ */
+    .projects-wrap { border: 1px solid var(--border); }
+    .proj-row {
+      border-bottom: 1px solid var(--border); background: var(--bg2);
+      transition: background .2s;
+    }
+    .proj-row:last-child { border-bottom: none; }
+    .proj-row:hover { background: var(--surface); }
+    .proj-top {
+      display: grid; grid-template-columns: 52px 1fr auto;
+      gap: 1.5rem; align-items: center;
+      padding: 1.7rem 2rem; cursor: default;
+    }
+    .proj-index {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem; font-weight: 300; color: var(--muted2);
+      letter-spacing: 0.06em;
+    }
+    .proj-meta {}
+    .proj-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem; font-weight: 400; color: var(--text);
+      margin-bottom: 0.18rem; transition: color .2s;
+    }
+    .proj-row:hover .proj-title { color: var(--gold); }
+    .proj-short { font-size: 0.78rem; color: var(--muted); font-weight: 300; }
+    .proj-right { display: flex; align-items: center; gap: 0.8rem; flex-shrink: 0; }
+    .pill {
+      font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 400;
+      padding: 0.2rem 0.6rem; border: 1px solid var(--border); color: var(--muted);
+    }
+    .pill.wip { border-color: rgba(200,169,110,0.45); color: var(--gold); background: var(--gold-dim); animation: wip-pulse 2s ease-in-out infinite; }
+    @keyframes wip-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.55; } }
+    .pill.ml  { border-color: rgba(120,160,220,0.3); color: #90aacf; }
+    .pill.cv  { border-color: rgba(160,120,220,0.3); color: #b090cf; }
+    .pill.nlp { border-color: rgba(120,200,150,0.3); color: #80c890; }
+    .toggle-btn {
+      width: 30px; height: 30px; border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; color: var(--muted); cursor: default;
+      transition: all .25s; flex-shrink: 0; background: none;
+      line-height: 1;
+    }
+    .toggle-btn.open { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
+    .proj-body {
+      display: none; padding: 0 2rem 2rem;
+      border-top: 1px solid var(--border);
+    }
+    .proj-body.open { display: block; }
+    .proj-body-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; padding-top: 1.8rem; }
+    .proj-desc p { font-size: 0.88rem; color: var(--muted); font-weight: 300; line-height: 1.85; margin-bottom: 0.9rem; }
+    .proj-desc p:last-child { margin-bottom: 0; }
+    .proj-stack-label { font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted2); margin-bottom: 0.5rem; margin-top: 1.2rem; }
+    .proj-actions { display: flex; gap: 0.7rem; flex-wrap: wrap; margin-top: 1.4rem; }
+    .proj-btn {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--muted); text-decoration: none; border: 1px solid var(--border);
+      padding: 0.38rem 0.85rem; transition: all .2s; cursor: default;
+    }
+    .proj-btn:hover { color: var(--gold); border-color: rgba(200,169,110,0.4); background: var(--gold-glow); }
+    .proj-btn svg { width: 11px; height: 11px; }
+    .demo-area {}
+    .demo-frame {
+      border: 1px solid var(--border); background: #090912;
+      overflow: hidden;
+    }
+    .demo-frame iframe { width: 100%; height: 290px; border: none; display: block; }
+    .demo-placeholder {
+      height: 200px; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 0.8rem;
+      color: var(--muted2); font-size: 0.78rem; font-weight: 300; letter-spacing: 0.06em;
+      border: 1px dashed var(--border);
+    }
+    .demo-placeholder svg { width: 30px; height: 30px; opacity: 0.3; }
+    .demo-hint { font-size: 0.7rem; color: var(--muted2); margin-top: 0.65rem; font-weight: 300; }
+
+    /* ══════════ EXPERIENCE ══════════ */
+    .exp-layout { display: grid; grid-template-columns: 190px 1fr; }
+    .exp-tabs {
+      border-right: 1px solid var(--border);
+      padding-right: 0;
+    }
+    .exp-tab {
+      display: flex; align-items: center; gap: 0;
+      padding: 1rem 1.5rem 1rem 0;
+      border-bottom: 1px solid var(--border);
+      cursor: default; transition: all .2s; position: relative;
+    }
+    .exp-tab::after {
+      content: ''; position: absolute; right: -1px; top: 0; bottom: 0;
+      width: 2px; background: var(--gold); opacity: 0; transition: opacity .2s;
+    }
+    .exp-tab.active::after, .exp-tab:hover::after { opacity: 1; }
+    .exp-tab-label { font-size: 0.7rem; font-weight: 300; color: var(--muted2); transition: color .2s; letter-spacing: 0.06em; line-height: 1.4; }
+    .exp-tab.active .exp-tab-label, .exp-tab:hover .exp-tab-label { color: var(--gold); }
+    .exp-panels { padding-left: 3rem; }
+    .exp-panel { display: none; }
+    .exp-panel.active { display: block; }
+    .exp-date { font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; }
+    .exp-role { font-family: 'Cormorant Garamond', serif; font-size: 1.7rem; font-weight: 300; margin-bottom: 0.15rem; }
+    .exp-org { font-size: 0.82rem; color: var(--muted); font-weight: 300; margin-bottom: 1.8rem; letter-spacing: 0.04em; }
+    .exp-list { list-style: none; display: flex; flex-direction: column; gap: 0.85rem; }
+    .exp-list li {
+      font-size: 0.88rem; color: var(--muted); font-weight: 300;
+      line-height: 1.8; padding-left: 1.4rem; position: relative;
+    }
+    .exp-list li::before { content: '—'; position: absolute; left: 0; color: var(--gold2); font-size: 0.75rem; top: 0.05em; }
+
+    /* ══════════ EDUCATION ══════════ */
+    .edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); }
+    .edu-card { background: var(--surface); padding: 2.2rem; }
+    .edu-institution { font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.6rem; }
+    .edu-degree { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; font-weight: 400; margin-bottom: 0.4rem; line-height: 1.3; }
+    .edu-period { font-size: 0.7rem; color: var(--muted2); letter-spacing: 0.08em; margin-bottom: 1.2rem; }
+    .edu-gpa {
+      display: inline-block; font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem; font-weight: 300; color: var(--gold); margin-bottom: 0.2rem;
+    }
+    .edu-gpa-label { font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted2); margin-bottom: 0.8rem; }
+    .edu-note { font-size: 0.8rem; color: var(--muted); font-weight: 300; }
+
+    /* ══════════ CONTACT ══════════ */
+    #contact { padding-bottom: 140px; }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+    .contact-text p { font-size: 0.92rem; color: var(--muted); font-weight: 300; line-height: 1.9; margin-bottom: 1rem; }
+    .contact-block { border: 1px solid var(--border); }
+    .c-row {
+      display: grid; grid-template-columns: 90px 1fr;
+      gap: 1rem; align-items: center;
+      padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--border);
+      text-decoration: none; transition: background .2s;
+    }
+    .c-row:last-child { border-bottom: none; }
+    .c-row:hover { background: var(--surface2); }
+    .c-label { font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted2); }
+    .c-val { font-size: 0.84rem; color: var(--text); font-weight: 300; transition: color .2s; }
+    .c-row:hover .c-val { color: var(--gold); }
+
+    /* ══════════ FOOTER ══════════ */
     footer {
-      text-align: center;
-      padding: 30px;
-      color: gray;
+      border-top: 1px solid var(--border);
+      padding: 2rem 4rem;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    footer p { font-size: 0.68rem; color: var(--muted2); letter-spacing: 0.1em; }
+    .footer-sig {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem; font-weight: 300; color: var(--muted2);
+      letter-spacing: 0.12em;
+    }
+    .footer-sig em { font-style: normal; color: var(--gold); }
+
+    /* ══════════ ANIMATIONS ══════════ */
+    @keyframes riseUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .reveal {
+      opacity: 0; transform: translateY(26px);
+      transition: opacity .7s cubic-bezier(.4,0,.2,1), transform .7s cubic-bezier(.4,0,.2,1);
+    }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+    .d1 { transition-delay: .08s; }
+    .d2 { transition-delay: .16s; }
+    .d3 { transition-delay: .24s; }
+    .d4 { transition-delay: .32s; }
+
+    /* scrollbar */
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--muted2); }
+    ::-webkit-scrollbar-thumb:hover { background: var(--gold2); }
+
+    /* ══════════ MOBILE ══════════ */
+    @media (max-width: 768px) {
+      nav { padding: 0 1.5rem; }
+      .nav-links { display: none; }
+      .wrap { padding: 0 1.5rem; }
+      section { padding: 90px 0 60px; }
+      .hero-name { font-size: 3rem; }
+      .hero-aside { display: none; }
+      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .proj-body-grid { grid-template-columns: 1fr; }
+      .proj-right .pill:not(.wip) { display: none; }
+      .exp-layout { grid-template-columns: 1fr; }
+      .exp-tabs { border-right: none; border-bottom: 1px solid var(--border); padding-bottom: 1rem; display: flex; flex-wrap: wrap; gap: 0.3rem; }
+      .exp-tab { padding: 0.4rem 0.7rem; border-bottom: none; border: 1px solid var(--border); }
+      .exp-tab::after { display: none; }
+      .exp-panels { padding-left: 0; padding-top: 2rem; }
+      .edu-grid { grid-template-columns: 1fr; }
+      .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      footer { flex-direction: column; gap: 0.5rem; padding: 1.5rem; }
     }
   </style>
 </head>
-
 <body>
 
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="curR"></div>
+
+<!-- ██ NAV -->
 <nav>
-  <a href="#about">About</a>
-  <a href="#projects">Projects</a>
-  <a href="#experience">Experience</a>
-  <a href="#skills">Skills</a>
-  <a href="#contact">Contact</a>
+  <a class="nav-logo" href="#hero">M<em>·</em>A<em>·</em>S</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a class="nav-resume" href="Abdullah_Shahzad_UIC.pdf" target="_blank">Résumé ↗</a>
 </nav>
 
-<header>
-  <h1>Abdullah Shahzad</h1>
-  <p>Data Science • AI • Machine Learning</p>
-
-  <div>
-    <a class="btn" href="resume.pdf">Resume</a>
-    <a class="btn" href="https://github.com/MickeyShahzad">GitHub</a>
-    <a class="btn" href="#">LinkedIn</a>
+<!-- ██ HERO -->
+<section id="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-orb"></div>
+  <div class="wrap hero-content">
+    <div class="hero-tag">Data Scientist &nbsp;·&nbsp; Machine Learning &nbsp;·&nbsp; Chicago, IL</div>
+    <h1 class="hero-name">Muhammad<br><em>Abdullah</em><br>Shahzad</h1>
+    <div class="hero-rule"></div>
+    <p class="hero-sub">B.S. Data Science &nbsp;·&nbsp; University of Illinois Chicago &nbsp;·&nbsp; GPA 3.94</p>
+    <p class="hero-desc">Building intelligent systems where computer vision meets real-world research — from segmenting crystals under a microscope to detecting disease in plants. I pursue precision at every layer of the pipeline.</p>
+    <div class="hero-ctas">
+      <a class="btn btn-gold" href="#projects">View Projects</a>
+      <a class="btn btn-outline" href="Abdullah_Shahzad_UIC.pdf" target="_blank">Download Résumé</a>
+    </div>
+    <div class="hero-links">
+      <a class="hero-link" href="https://github.com/MickeyShahzad" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        MickeyShahzad
+      </a>
+      <a class="hero-link" href="https://www.linkedin.com/in/mabdullahshahzad/" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        mabdullahshahzad
+      </a>
+      <a class="hero-link" href="mailto:mshah269@uic.edu">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        mshah269@uic.edu
+      </a>
+    </div>
+    <div class="hero-aside">
+      <div class="h-stat"><div class="h-stat-n">3.94</div><div class="h-stat-l">GPA / 4.00</div></div>
+      <div class="h-stat"><div class="h-stat-n">80%+</div><div class="h-stat-l">Dice Score</div></div>
+      <div class="h-stat"><div class="h-stat-n">#1</div><div class="h-stat-l">UIC Contest</div></div>
+    </div>
   </div>
-</header>
+</section>
 
+<!-- ██ ABOUT -->
 <section id="about">
-  <h2>About Me</h2>
-  <p>
-    I’m a UIC student with a 4.0 GPA focused on Data Science, AI, and Machine Learning.
-    I build real-world projects in computer vision and financial prediction.
-  </p>
+  <div class="wrap">
+    <p class="sec-eyebrow reveal">About</p>
+    <div class="about-grid">
+      <div class="about-text">
+        <h2 class="sec-title reveal">A mind trained on<br><em>data and discipline.</em></h2>
+        <p class="reveal d1">I'm a <strong>Data Science student at the University of Illinois Chicago</strong> — GPA 3.94, Dean's List every semester since I arrived. My concentration in Computer Science means I don't just understand data: I build systems around it.</p>
+        <p class="reveal d2">My work lives at the intersection of <strong>machine learning, computer vision, and research</strong>. At UIC's MaSEL lab I built and deployed a U-Net segmentation model in PyTorch that achieved 80%+ Dice accuracy on microscopy images no model had ever seen. I've shipped AI backends for hackathons, built voice assistants, and designed facial recognition systems — all from scratch.</p>
+        <p class="reveal d3">Originally from Faisalabad, Pakistan — <em>bilingual, cross-cultural, relentlessly curious.</em> I founded a programming club at 16, was elected Head Boy of a 500-student institution, and I've been building ever since.</p>
+        <div class="reveal d3" style="margin-top:1.8rem;">
+          <a class="btn btn-outline" href="Abdullah_Shahzad_UIC.pdf" target="_blank">Download Résumé</a>
+        </div>
+      </div>
+      <div class="reveal d2">
+        <div class="skill-group">
+          <p class="sg-label">Languages</p>
+          <div class="tags">
+            <span class="tag">Python</span><span class="tag">R</span><span class="tag">SQL</span>
+            <span class="tag">C++</span><span class="tag">C</span><span class="tag">Java</span><span class="tag">Bash</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <p class="sg-label">ML · CV · Data</p>
+          <div class="tags">
+            <span class="tag">PyTorch</span><span class="tag">OpenCV</span><span class="tag">U-Net</span>
+            <span class="tag">scikit-learn</span><span class="tag">Pandas</span><span class="tag">NumPy</span>
+            <span class="tag">Matplotlib</span><span class="tag">Seaborn</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <p class="sg-label">Tools &amp; Platforms</p>
+          <div class="tags">
+            <span class="tag">Git</span><span class="tag">GitHub</span><span class="tag">Jupyter</span>
+            <span class="tag">PostgreSQL</span><span class="tag">LabelMe</span><span class="tag">Linux</span>
+            <span class="tag">Google Colab</span><span class="tag">VSCode</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <p class="sg-label">Interpersonal</p>
+          <div class="tags">
+            <span class="tag">Bilingual</span><span class="tag">Leadership</span>
+            <span class="tag">Research Communication</span><span class="tag">Event Coordination</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
+<!-- ██ PROJECTS -->
 <section id="projects">
-  <h2>Projects</h2>
+  <div class="wrap">
+    <p class="sec-eyebrow reveal">Projects</p>
+    <h2 class="sec-title reveal">Things I've <em>built.</em></h2>
+    <p class="sec-sub reveal">Click any project to expand — add your GitHub links and demo URLs when ready. Old projects without repos are still valid portfolio pieces.</p>
 
-  <div class="card">
-    <h3>Crystal Detection (U-Net)</h3>
-    <p>Deep learning model to detect crystals in microscopic images using PyTorch.</p>
-    <a href="#">View Project</a>
+    <div class="projects-wrap reveal">
+
+      <!-- 00 — IN PROGRESS -->
+      <div class="proj-row">
+        <div class="proj-top" onclick="toggleProj(this)">
+          <span class="proj-index">00</span>
+          <div class="proj-meta">
+            <p class="proj-title">[ Your Next Big Project ]</p>
+            <p class="proj-short">Replace this with your current project — it's already the most impressive thing here.</p>
+          </div>
+          <div class="proj-right">
+            <span class="pill wip">In Progress</span>
+            <button class="toggle-btn" aria-label="expand">+</button>
+          </div>
+        </div>
+        <div class="proj-body">
+          <div class="proj-body-grid">
+            <div class="proj-desc">
+              <p>This slot is reserved for what you're currently building. Describe it here — even a rough one-liner like "Building an X that does Y using Z" is enough to put on a portfolio. Recruiters love seeing work in motion.</p>
+              <p>Add a short description, your goals, and the stack. Even without a working demo, the "In Progress" badge signals ambition.</p>
+              <div class="proj-stack-label">Stack</div>
+              <div class="tags" style="margin-top:0.3rem;">
+                <span class="tag">Your Stack Here</span>
+              </div>
+              <div class="proj-actions">
+                <a class="proj-btn" href="https://github.com/MickeyShahzad" target="_blank">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+                  GitHub (WIP)
+                </a>
+              </div>
+            </div>
+            <div class="demo-area">
+              <div class="demo-placeholder">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                Demo coming soon
+              </div>
+              <p class="demo-hint">→ Will link to your demo once deployed</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 01 — Crystal Segmentation (MaSEL) -->
+      <div class="proj-row">
+        <div class="proj-top" onclick="toggleProj(this)">
+          <span class="proj-index">01</span>
+          <div class="proj-meta">
+            <p class="proj-title">Crystal Segmentation — MaSEL Lab</p>
+            <p class="proj-short">U-Net deep learning model for real-time crystal detection on microscopy images · UIC Research</p>
+          </div>
+          <div class="proj-right">
+            <span class="pill ml">ML · CV</span>
+            <span class="pill">Research</span>
+            <button class="toggle-btn" aria-label="expand">+</button>
+          </div>
+        </div>
+        <div class="proj-body">
+          <div class="proj-body-grid">
+            <div class="proj-desc">
+              <p>Built a full U-Net segmentation pipeline in PyTorch for the UIC Department of Materials and Systems Engineering. Trained on 300+ manually annotated crystal microscopy images labeled with LabelMe, achieving <strong style="color:var(--text)">80%+ Dice accuracy on unseen test images</strong> — a meaningful result in a domain with scarce labeled data.</p>
+              <p>Automated the preprocessing pipeline in Python (flip, rotation, blur augmentations via torchvision), then developed an OpenCV + C++ post-processing stage to count and visualize detected crystals — cutting manual researcher analysis time by 50%.</p>
+              <div class="proj-stack-label">Stack</div>
+              <div class="tags" style="margin-top:0.3rem;">
+                <span class="tag">Python</span><span class="tag">PyTorch</span><span class="tag">U-Net</span>
+                <span class="tag">OpenCV</span><span class="tag">C++</span><span class="tag">LabelMe</span>
+                <span class="tag">torchvision</span>
+              </div>
+              <div class="proj-actions">
+                <a class="proj-btn" href="https://github.com/MickeyShahzad" target="_blank">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+                  GitHub Repo
+                </a>
+                <!-- Add a link to paper/report if you have one -->
+              </div>
+            </div>
+            <div class="demo-area">
+              <div class="demo-placeholder">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><circle cx="11" cy="11" r="3"/></svg>
+                Microscopy model output
+              </div>
+              <p class="demo-hint">→ Add a screenshot of a segmented crystal image from your results — even a Colab notebook link works here.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 02 — Plant Disease (SparkHacks) -->
+      <div class="proj-row">
+        <div class="proj-top" onclick="toggleProj(this)">
+          <span class="proj-index">02</span>
+          <div class="proj-meta">
+            <p class="proj-title">PlantScan AI — SparkHacks 2025</p>
+            <p class="proj-short">AI plant disease detection system · John Deere environmental challenge · Hackathon</p>
+          </div>
+          <div class="proj-right">
+            <span class="pill nlp">AI · Vision</span>
+            <span class="pill">Hackathon</span>
+            <button class="toggle-btn" aria-label="expand">+</button>
+          </div>
+        </div>
+        <div class="proj-body">
+          <div class="proj-body-grid">
+            <div class="proj-desc">
+              <p>Built at SparkHacks 2025 for the John Deere environmental challenge. The system allows farmers or agronomists to photograph a plant and receive an AI-powered disease diagnosis in seconds — enabling early intervention before crops are lost.</p>
+              <p>I built the Python backend using OpenAI's vision API for image analysis, then integrated it with a Java + HTML/CSS frontend to create a seamless full-stack prototype in under 24 hours.</p>
+              <div class="proj-stack-label">Stack</div>
+              <div class="tags" style="margin-top:0.3rem;">
+                <span class="tag">Python</span><span class="tag">OpenAI API</span>
+                <span class="tag">Java</span><span class="tag">HTML/CSS</span>
+              </div>
+              <div class="proj-actions">
+                <a class="proj-btn" href="https://github.com/MickeyShahzad" target="_blank">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+                  GitHub Repo
+                </a>
+              </div>
+            </div>
+            <div class="demo-area">
+              <div class="demo-placeholder">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Hackathon demo
+              </div>
+              <p class="demo-hint">→ Push the repo to GitHub and paste the link above. Add a demo GIF or screenshot here.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 03 — MickeyAI -->
+      <div class="proj-row">
+        <div class="proj-top" onclick="toggleProj(this)">
+          <span class="proj-index">03</span>
+          <div class="proj-meta">
+            <p class="proj-title">MickeyAI — Voice Virtual Assistant</p>
+            <p class="proj-short">Python voice assistant · 95% command accuracy · 40% adoption increase in retirement homes</p>
+          </div>
+          <div class="proj-right">
+            <span class="pill">NLP · Voice</span>
+            <button class="toggle-btn" aria-label="expand">+</button>
+          </div>
+        </div>
+        <div class="proj-body">
+          <div class="proj-body-grid">
+            <div class="proj-desc">
+              <p>MickeyAI is a voice-commanded virtual assistant built in Python using OpenAI's APIs, designed specifically to help <strong style="color:var(--text)">older adults in retirement homes</strong> navigate technology more independently. Reaching 95% command recognition accuracy, it drove a 40% increase in technology adoption among its target users.</p>
+              <p>Trained with ML-based voice recognition improvements iteratively, this project taught me how to design for real-world constraints — limited tech literacy, accent variation, ambient noise — not just benchmark performance.</p>
+              <div class="proj-stack-label">Stack</div>
+              <div class="tags" style="margin-top:0.3rem;">
+                <span class="tag">Python</span><span class="tag">OpenAI API</span>
+                <span class="tag">Speech Recognition</span><span class="tag">ML</span>
+              </div>
+              <div class="proj-actions">
+                <a class="proj-btn" href="https://github.com/MickeyShahzad" target="_blank">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+                  GitHub (push your code here)
+                </a>
+              </div>
+            </div>
+            <div class="demo-area">
+              <div class="demo-placeholder">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+                Voice assistant demo
+              </div>
+              <p class="demo-hint">→ Record a short screen capture of it running — even a 20-second clip uploaded to YouTube/unlisted works as a demo here.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 04 — Face ID Attendance -->
+      <div class="proj-row">
+        <div class="proj-top" onclick="toggleProj(this)">
+          <span class="proj-index">04</span>
+          <div class="proj-meta">
+            <p class="proj-title">Face ID Attendance System</p>
+            <p class="proj-short">Real-time facial recognition · 100 computations/sec · Eliminated manual tracking</p>
+          </div>
+          <div class="proj-right">
+            <span class="pill cv">CV</span>
+            <button class="toggle-btn" aria-label="expand">+</button>
+          </div>
+        </div>
+        <div class="proj-body">
+          <div class="proj-body-grid">
+            <div class="proj-desc">
+              <p>A real-time facial recognition attendance system built in Python — <strong style="color:var(--text)">100% elimination of manual attendance tracking</strong> at high-traffic events like RMUN and school bake sales. Processes 100 computations per second for near-instant recognition even in crowded environments.</p>
+              <p>This was one of my earliest computer vision projects and sparked a sustained interest in CV systems — an interest that later led me to the U-Net research internship at UIC.</p>
+              <div class="proj-stack-label">Stack</div>
+              <div class="tags" style="margin-top:0.3rem;">
+                <span class="tag">Python</span><span class="tag">OpenCV</span>
+                <span class="tag">Face Recognition</span><span class="tag">Real-time CV</span>
+              </div>
+              <div class="proj-actions">
+                <a class="proj-btn" href="https://github.com/MickeyShahzad" target="_blank">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+                  GitHub (push your code here)
+                </a>
+              </div>
+            </div>
+            <div class="demo-area">
+              <div class="demo-placeholder">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M7 7h.01M17 7h.01M7 17h.01M17 17h.01"/><rect x="9" y="9" width="6" height="6"/></svg>
+                Live recognition demo
+              </div>
+              <p class="demo-hint">→ A screen-recorded GIF of the system running is the best demo for this. Or link to a GitHub Pages hosted demo.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 05 — UIC Turtle Triad -->
+      <div class="proj-row">
+        <div class="proj-top" onclick="toggleProj(this)">
+          <span class="proj-index">05</span>
+          <div class="proj-meta">
+            <p class="proj-title">UIC Turtle Triad — 1st Place</p>
+            <p class="proj-short">Football × Pokémon hybrid game · Python Turtle · #1 of 85 groups · UIC CS111</p>
+          </div>
+          <div class="proj-right">
+            <span class="pill">Game · Python</span>
+            <button class="toggle-btn" aria-label="expand">+</button>
+          </div>
+        </div>
+        <div class="proj-body">
+          <div class="proj-body-grid">
+            <div class="proj-desc">
+              <p>Designed a creative football/Pokémon hybrid game using Python Turtle Graphics for UIC's Program Design I (CS 111) contest — <strong style="color:var(--text)">earning 1st place among 85 competing groups</strong> in a department-wide competition.</p>
+              <p>A fun early project that showed strong creative problem-solving and clean Python structure. Great evidence of standing out even in a competitive environment from day one at UIC.</p>
+              <div class="proj-stack-label">Stack</div>
+              <div class="tags" style="margin-top:0.3rem;">
+                <span class="tag">Python</span><span class="tag">Turtle Graphics</span>
+              </div>
+              <div class="proj-actions">
+                <a class="proj-btn" href="https://github.com/MickeyShahzad" target="_blank">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+                  GitHub
+                </a>
+              </div>
+            </div>
+            <div class="demo-area">
+              <div class="demo-placeholder">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Game demo
+              </div>
+              <p class="demo-hint">→ Record a screen capture of the game running. Even a 30-second video makes this memorable.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /projects-wrap -->
   </div>
-
-  <div class="card">
-    <h3>Stock Prediction + Sentiment Analysis</h3>
-    <p>Machine learning model predicting stock trends using social media sentiment.</p>
-    <a href="#">View Project</a>
-  </div>
-
 </section>
 
+<!-- ██ EXPERIENCE -->
 <section id="experience">
-  <h2>Experience</h2>
-
-  <div class="card">
-    <h3>Data Science Intern (GPIP)</h3>
-    <p>Worked on real-world ML projects and data analysis at UIC.</p>
+  <div class="wrap">
+    <p class="sec-eyebrow reveal">Experience</p>
+    <h2 class="sec-title reveal">Where I've <em>worked.</em></h2>
+    <p class="sec-sub reveal">Professional, research, and leadership experience.</p>
+    <div class="exp-layout reveal">
+      <div class="exp-tabs">
+        <div class="exp-tab active" onclick="switchTab(this,'ep0')"><span class="exp-tab-label">UIC MaSEL<br>Research Intern</span></div>
+        <div class="exp-tab" onclick="switchTab(this,'ep1')"><span class="exp-tab-label">SparkHacks<br>Hackathon Dev</span></div>
+        <div class="exp-tab" onclick="switchTab(this,'ep2')"><span class="exp-tab-label">Head Boy<br>Roots Ivy</span></div>
+        <div class="exp-tab" onclick="switchTab(this,'ep3')"><span class="exp-tab-label">IVY Programming<br>Club Founder</span></div>
+      </div>
+      <div class="exp-panels">
+        <div class="exp-panel active" id="ep0">
+          <p class="exp-date">Jun 2025 – Aug 2025</p>
+          <h3 class="exp-role">Machine Learning Research Intern</h3>
+          <p class="exp-org">University of Illinois Chicago · MaSEL Department</p>
+          <ul class="exp-list">
+            <li>Built a U-Net segmentation model in PyTorch, achieving 80%+ Dice accuracy on unseen crystal microscopy images.</li>
+            <li>Processed and annotated 300+ microscopy images using LabelMe; automated the full data preparation pipeline in Python, accelerating training iterations.</li>
+            <li>Applied data augmentation strategies (flip, rotation, blur) with torchvision to improve model robustness on limited data.</li>
+            <li>Developed an OpenCV post-processing pipeline in C++ to count and visualize detected crystals, enabling researchers to interpret results 50% faster.</li>
+          </ul>
+        </div>
+        <div class="exp-panel" id="ep1">
+          <p class="exp-date">February 2025</p>
+          <h3 class="exp-role">Hackathon Developer</h3>
+          <p class="exp-org">SparkHacks 2025 · John Deere Environmental Challenge</p>
+          <ul class="exp-list">
+            <li>Built a Python backend using OpenAI APIs for plant disease detection from photographs — enabling early identification and faster response.</li>
+            <li>Integrated a Java + HTML/CSS frontend with the Python backend, enabling seamless data flow and user interaction in a 24-hour build.</li>
+          </ul>
+        </div>
+        <div class="exp-panel" id="ep2">
+          <p class="exp-date">Sep 2023 – May 2024</p>
+          <h3 class="exp-role">Head Boy</h3>
+          <p class="exp-org">Roots Ivy International School · Faisalabad, Pakistan</p>
+          <ul class="exp-list">
+            <li>Supervised 45+ student clubs, enforced participation rules, and resolved conflicts — grew attendance by 90%.</li>
+            <li>Organized and coordinated large-scale school events for 500+ attendees; served as primary liaison between students and faculty.</li>
+            <li>Founded a peer mentorship program benefiting 50 students, improving academic performance by 70%.</li>
+            <li>Designed and implemented a leadership training program for club presidents, boosting club efficiency by 20%.</li>
+          </ul>
+        </div>
+        <div class="exp-panel" id="ep3">
+          <p class="exp-date">Sep 2022 – May 2023</p>
+          <h3 class="exp-role">Founder &amp; Instructor</h3>
+          <p class="exp-org">IVY Programming Club · Faisalabad, Pakistan</p>
+          <ul class="exp-list">
+            <li>Created a full-year curriculum in Scratch and Python for students in grades 4–6, improving coding proficiency by 80%.</li>
+            <li>Led 144+ hours of weekly hands-on programming sessions using VS Code and Xcode.</li>
+            <li>Managed a safe, inclusive environment for 20+ students and coordinated end-of-year showcase events.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
-
-  <div class="card">
-    <h3>Student Worker – UIC UREC</h3>
-    <p>Handled operations, customer service, and incident management.</p>
-  </div>
-
 </section>
 
-<section id="skills">
-  <h2>Skills</h2>
-
-  <div class="card">
-    <p><b>Languages:</b> Python, C++, SQL, R</p>
-    <p><b>Tools:</b> PyTorch, OpenCV, Git</p>
-    <p><b>Concepts:</b> Machine Learning, Data Analysis, Algorithms</p>
+<!-- ██ EDUCATION -->
+<section id="education">
+  <div class="wrap">
+    <p class="sec-eyebrow reveal">Education</p>
+    <h2 class="sec-title reveal">Academic <em>foundation.</em></h2>
+    <div class="edu-grid reveal">
+      <div class="edu-card">
+        <p class="edu-institution">University of Illinois Chicago</p>
+        <h3 class="edu-degree">B.S. Data Science<br><small style="font-size:0.75em;font-weight:300;color:var(--muted)">Concentration: Computer Science</small></h3>
+        <p class="edu-period">August 2024 – May 2027 · Chicago, IL</p>
+        <div class="edu-gpa">3.94 <small style="font-size:0.5em;vertical-align:middle;color:var(--muted2)">/ 4.00</small></div>
+        <p class="edu-gpa-label">GPA</p>
+        <p class="edu-note">🏆 College of Engineering Dean's List — Fall 2024, Spring 2025, Fall 2025</p>
+      </div>
+      <div class="edu-card">
+        <p class="edu-institution">Roots Ivy International School</p>
+        <h3 class="edu-degree">Cambridge A-Level &amp; IGCSE</h3>
+        <p class="edu-period">May 2024 · Faisalabad, Pakistan</p>
+        <div class="edu-gpa">3.98 <small style="font-size:0.5em;vertical-align:middle;color:var(--muted2)">/ 4.00</small></div>
+        <p class="edu-gpa-label">GPA</p>
+        <p class="edu-note">Cambridge International curriculum · Head Boy of graduating class</p>
+      </div>
+    </div>
   </div>
-
 </section>
 
+<!-- ██ CONTACT -->
 <section id="contact">
-  <h2>Contact</h2>
-
-  <div class="card">
-    <p>Email: mshah269@uic.edu</p>
-    <p><a href="#">LinkedIn</a></p>
+  <div class="wrap">
+    <p class="sec-eyebrow reveal">Contact</p>
+    <h2 class="sec-title reveal">Let's <em>connect.</em></h2>
+    <div class="contact-grid">
+      <div class="reveal">
+        <p class="sec-sub" style="margin-bottom:1.4rem;">Open to research opportunities, internships, and interesting conversations about data science, ML, and computer vision.</p>
+        <p style="font-size:0.88rem;color:var(--muted);font-weight:300;line-height:1.9;">Whether you're a recruiter, a researcher, or someone building something interesting — reach out. I respond to every message.</p>
+      </div>
+      <div class="contact-block reveal d1">
+        <a class="c-row" href="mailto:mshah269@uic.edu">
+          <span class="c-label">Email</span>
+          <span class="c-val">mshah269@uic.edu</span>
+        </a>
+        <a class="c-row" href="https://www.linkedin.com/in/mabdullahshahzad/" target="_blank">
+          <span class="c-label">LinkedIn</span>
+          <span class="c-val">mabdullahshahzad</span>
+        </a>
+        <a class="c-row" href="https://github.com/MickeyShahzad" target="_blank">
+          <span class="c-label">GitHub</span>
+          <span class="c-val">MickeyShahzad</span>
+        </a>
+        <a class="c-row" href="tel:3128261566">
+          <span class="c-label">Phone</span>
+          <span class="c-val">312-826-1566</span>
+        </a>
+        <a class="c-row" href="Abdullah_Shahzad_UIC.pdf" target="_blank">
+          <span class="c-label">Résumé</span>
+          <span class="c-val">Download PDF ↗</span>
+        </a>
+      </div>
+    </div>
   </div>
-
 </section>
 
+<!-- ██ FOOTER -->
 <footer>
-  <p>© 2026 Abdullah Shahzad</p>
+  <p>© 2025 Muhammad Abdullah Shahzad · Chicago, IL</p>
+  <div class="footer-sig">M<em>·</em>A<em>·</em>S</div>
 </footer>
 
+<script>
+  /* ── Custom Cursor ── */
+  const cur = document.getElementById('cur');
+  const curR = document.getElementById('curR');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cur.style.left = mx+'px'; cur.style.top = my+'px'; });
+  (function animRing() {
+    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+    curR.style.left = rx+'px'; curR.style.top = ry+'px';
+    requestAnimationFrame(animRing);
+  })();
+  document.querySelectorAll('a, button, .proj-top, .exp-tab, .toggle-btn').forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+  });
+
+  /* ── Scroll Reveal ── */
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  /* ── Project Toggle ── */
+  function toggleProj(headerEl) {
+    const row = headerEl.closest('.proj-row');
+    const body = row.querySelector('.proj-body');
+    const btn = row.querySelector('.toggle-btn');
+    const open = body.classList.toggle('open');
+    btn.textContent = open ? '−' : '+';
+    btn.classList.toggle('open', open);
+  }
+
+  /* ── Experience Tabs ── */
+  function switchTab(tabEl, panelId) {
+    document.querySelectorAll('.exp-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.exp-panel').forEach(p => p.classList.remove('active'));
+    tabEl.classList.add('active');
+    document.getElementById(panelId).classList.add('active');
+  }
+
+  /* ── Active Nav on Scroll ── */
+  const sections = document.querySelectorAll('section[id]');
+  const navAs = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let cur = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) cur = s.id; });
+    navAs.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#'+cur));
+  }, { passive: true });
+</script>
 </body>
 </html>
